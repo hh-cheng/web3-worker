@@ -3,14 +3,29 @@ export interface Env {
   DEEPSEEK_API_KEY: string
 }
 
-const corsHeaders = {
-  'Access-Control-Max-Age': '86400',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Allow-Origin': 'https://chatbot.bonelycheng.cc',
+const allowedOrigins = [
+  'https://chat.bonelycheng.cc',
+  'https://chatbot.bonelycheng.cc',
+  'http://localhost:5174', // for local testing
+]
+
+function getCorsHeaders(request: Request): Record<string, string> {
+  const origin = request.headers.get('origin') || ''
+  const isAllowed = allowedOrigins.includes(origin)
+
+  return {
+    'Access-Control-Allow-Origin': isAllowed
+      ? origin
+      : 'https://chatbot.bonelycheng.cc',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400',
+  }
 }
 
 async function handleRequest(request: Request, env: Env): Promise<Response> {
+  const corsHeaders = getCorsHeaders(request)
+
   // Handle CORS preflight
   if (request.method === 'OPTIONS') {
     return new Response(null, {
