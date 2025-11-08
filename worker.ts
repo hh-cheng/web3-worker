@@ -3,15 +3,16 @@ export interface Env {
   DEEPSEEK_API_KEY: string
 }
 
-const allowedOrigins = [
-  'https://chat.bonelycheng.cc',
-  'https://chatbot.bonelycheng.cc',
-  'http://localhost:5174', // for local testing
+const allowedOriginPatterns = [
+  /^https:\/\/(.+\.)?bonelycheng\.cc$/,
+  /^http:\/\/localhost:\d+$/,
 ]
 
-function getCorsHeaders(request: Request): Record<string, string> {
-  const origin = request.headers.get('origin') || ''
-  const isAllowed = allowedOrigins.includes(origin)
+function getCorsHeaders(request: Request) {
+  const origin = request.headers.get('Origin') || ''
+  const isAllowed = allowedOriginPatterns.some((pattern) =>
+    pattern.test(origin),
+  )
 
   return {
     'Access-Control-Allow-Origin': isAllowed
