@@ -9,7 +9,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     return new Response(null, {
       headers: {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Origin': 'https://chat.bonelycheng.cc',
+        'Access-Control-Allow-Origin': 'https://chatbot.bonelycheng.cc',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     })
@@ -63,7 +63,7 @@ export default {
       headers: {
         ...response.headers,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Origin': 'https://chat.bonelycheng.cc',
+        'Access-Control-Allow-Origin': 'https://chatbot.bonelycheng.cc',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     })
