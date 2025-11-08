@@ -95,7 +95,7 @@ pnpm exec wrangler dev --log-level debug
 Deploy your worker to Cloudflare:
 
 ```bash
-pnpm exec wrangler deploy
+npx wrangler deploy
 ```
 
 This command:
