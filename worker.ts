@@ -27,7 +27,7 @@ export default {
         },
       ).then((res) => res.json())
 
-      return Response.json({ reply: response.choices[0].message.content })
+      return Response.json({ reply: response.choices[0].message })
     }
 
     return new Response('AI Chat Worker (TypeScript)', { status: 200 })
