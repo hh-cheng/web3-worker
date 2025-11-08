@@ -3,15 +3,19 @@ export interface Env {
   DEEPSEEK_API_KEY: string
 }
 
+const corsHeaders = {
+  'Access-Control-Max-Age': '86400',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Origin': 'https://chatbot.bonelycheng.cc',
+}
+
 async function handleRequest(request: Request, env: Env): Promise<Response> {
+  // Handle CORS preflight
   if (request.method === 'OPTIONS') {
-    // Preflight request
     return new Response(null, {
-      headers: {
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Origin': 'https://chatbot.bonelycheng.cc',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
+      status: 204,
+      headers: corsHeaders,
     })
   }
 
@@ -37,35 +41,39 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
       }).then((res) => res.json())
 
       return new Response(JSON.stringify(result.choices[0].message), {
-        headers: { 'Content-Type': 'application/json' },
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders,
+        },
       })
     } catch (error) {
+      console.error('Chat request error:', error)
       return new Response(
         JSON.stringify({ error: 'Failed to process chat request' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } },
+        {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            ...corsHeaders,
+          },
+        },
       )
     }
   }
 
   // Default response
   return new Response(JSON.stringify({ hello: 'world' }), {
-    headers: { 'Content-Type': 'application/json' },
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders,
+    },
   })
 }
 
 export default {
   async fetch(request: Request, env: Env) {
-    const response = await handleRequest(request, env)
-
-    // Add CORS headers to all responses
-    return new Response(response.body, {
-      ...response,
-      headers: {
-        ...response.headers,
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Origin': 'https://chatbot.bonelycheng.cc',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
-    })
+    return handleRequest(request, env)
   },
 }
