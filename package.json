@@ -1,0 +1,30 @@
+{
+  "name": "web3-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "lint": "biome check --write --no-errors-on-unmatched"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.4",
+    "@commitlint/config-conventional": "^20.0.0",
+    "commitlint": "^20.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.46.0"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts,json,jsonc,css}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  }
+}
