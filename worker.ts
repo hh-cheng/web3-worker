@@ -9,7 +9,7 @@ export default {
 
     if (url.pathname === '/chat' && request.method === 'POST') {
       const body = await request.json()
-      const { message } = body
+      const { messages } = body
 
       const response = await fetch(
         'https://api.deepseek.com/chat/completions',
@@ -20,9 +20,9 @@ export default {
             Authorization: `Bearer ${env.DEEPSEEK_API_KEY}`,
           },
           body: JSON.stringify({
+            messages,
             stream: false,
             model: 'deepseek-chat',
-            messages: [{ role: 'user', content: message }],
           }),
         },
       ).then((res) => res.json())
